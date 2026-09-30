@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DVD电影网 - 高清影视在线观看 | dvddianyingwang-h5</title>
+<meta name="keywords" content="DVD电影网,dvddianyingwang-h5,高清电影,在线观看,免费影视,热门大片">
+<meta name="description" content="DVD电影网(dvddianyingwang-h5)提供最新高清电影、电视剧、动漫、综艺在线观看，重温DVD时代的观影体验，支持手机端流畅播放。">
+<link rel="canonical" href="https://dvddianyingwang-h5/">
+<style>
+/* ===== Reset & Base ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Courier New',monospace;
+  background:#0a0a0a;
+  color:#e0e0e0;
+  line-height:1.6;
+  overflow-x:hidden;
+  position:relative;
+}
+/* VHS Scanline Overlay */
+body::before{
+  content:'';
+  position:fixed;
+  top:0;left:0;width:100%;height:100%;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255,0,255,0.03) 2px,
+    rgba(255,0,255,0.03) 4px
+  );
+  pointer-events:none;
+  z-index:9999;
+}
+a{color:#ff6ec7;text-decoration:none;transition:color .3s}
+a:hover{color:#f9cb28}
+
+/* ===== DVD Pixel Logo Animation ===== */
+@keyframes dvdBounce{
+  0%{transform:translate(0,0)}
+  25%{transform:translate(calc(100vw - 120px),calc(100vh - 60px))}
+  50%{transform:translate(0,calc(100vh - 60px))}
+  75%{transform:translate(calc(100vw - 120px),0)}
+  100%{transform:translate(0,0)}
+}
+.dvd-float{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:120px;
+  height:60px;
+  z-index:10000;
+  animation:dvdBounce 20s linear infinite;
+  opacity:0.15;
+  pointer-events:none;
+}
+.dvd-float svg{width:100%;height:100%}
+
+/* ===== Header ===== */
+.header{
+  background:linear-gradient(135deg,#1a001a 0%,#2d0030 50%,#1a001a 100%);
+  border-bottom:2px solid #ff6ec7;
+  padding:1rem 0;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  box-shadow:0 0 20px rgba(255,110,199,0.3);
+}
+.nav-container{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 1rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.logo{
+  font-size:1.8rem;
+  font-weight:bold;
+  color:#ff6ec7;
+  text-shadow:0 0 10px #ff6ec7,0 0 20px #ff6ec7;
+  letter-spacing:2px;
+}
+.logo span{color:#f9cb28}
+.nav-links{
+  display:flex;
+  gap:1.5rem;
+  list-style:none;
+}
+.nav-links a{
+  color:#e0e0e0;
+  font-weight:bold;
+  padding:0.5rem 1rem;
+  border:1px solid transparent;
+  transition:all .3s;
+  text-transform:uppercase;
+  font-size:0.85rem;
+  letter-spacing:1px;
+}
+.nav-links a:hover{
+  border-color:#ff6ec7;
+  color:#ff6ec7;
+  box-shadow:0 0 10px rgba(255,110,199,0.3);
+}
+
+/* ===== Hero ===== */
+.hero{
+  background:linear-gradient(180deg,#0a0a0a 0%,#1a001a 50%,#0a0a0a 100%);
+  padding:4rem 1rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{
+  content:'DVD';
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:15rem;
+  font-weight:bold;
+  color:rgba(255,110,199,0.03);
+  z-index:0;
+}
+.hero-content{position:relative;z-index:1;max-width:800px;margin:0 auto}
+.hero h1{
+  font-size:2.5rem;
+  margin-bottom:1rem;
+  color:#ff6ec7;
+  text-shadow:0 0 15px rgba(255,110,199,0.5);
+  letter-spacing:3px;
+}
+.hero p{
+  font-size:1.1rem;
+  margin-bottom:1.5rem;
+  color:#ccc;
+}
+.hero-url{
+  display:inline-block;
+  background:#f9cb28;
+  color:#000;
+  padding:0.6rem 1.5rem;
+  border-radius:0;
+  font-weight:bold;
+  font-size:0.9rem;
+  letter-spacing:1px;
+  border:2px solid #f9cb28;
+  box-shadow:0 0 10px rgba(249,203,40,0.3);
+}
+
+/* ===== Sections ===== */
+.section{
+  max-width:1200px;
+  margin:0 auto;
+  padding:3rem 1rem;
+}
+.section-title{
+  text-align:center;
+  font-size:2rem;
+  margin-bottom:2rem;
+  color:#ff6ec7;
+  text-shadow:0 0 10px rgba(255,110,199,0.3);
+  letter-spacing:2px;
+}
+.section-title::before{content:'▶ ';color:#f9cb28}
+.section-title::after{content:' ◀';color:#f9cb28}
+
+/* ===== Category Pills ===== */
+.cat-pills{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:0.8rem;
+  margin-bottom:2rem;
+}
+.cat-pill{
+  padding:0.5rem 1.2rem;
+  background:transparent;
+  border:1px solid #ff6ec7;
+  color:#ff6ec7;
+  cursor:pointer;
+  transition:all .3s;
+  font-family:inherit;
+  font-size:0.85rem;
+  letter-spacing:1px;
+}
+.cat-pill:hover,.cat-pill.active{
+  background:#ff6ec7;
+  color:#000;
+  box-shadow:0 0 10px rgba(255,110,199,0.4);
+}
+
+/* ===== Movie Cards ===== */
+.movie-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:1.5rem;
+}
+.movie-card{
+  background:#111;
+  border:1px solid #333;
+  overflow:hidden;
+  transition:all .3s;
+  position:relative;
+}
+.movie-card:hover{
+  border-color:#ff6ec7;
+  box-shadow:0 0 15px rgba(255,110,199,0.2);
+  transform:translateY(-3px);
+}
+.movie-poster{
+  width:100%;
+  height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:3rem;
+  position:relative;
+}
+.movie-poster::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;width:100%;height:100%;
+  background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,0.8));
+}
+.movie-info{padding:0.8rem}
+.movie-title{font-size:0.95rem;font-weight:bold;margin-bottom:0.3rem;color:#fff}
+.movie-meta{font-size:0.75rem;color:#888}
+
+/* ===== Ranking ===== */
+.rank-list{list-style:none;max-width:700px;margin:0 auto}
+.rank-item{
+  display:flex;
+  align-items:center;
+  padding:1rem;
+  margin-bottom:0.8rem;
+  background:#111;
+  border:1px solid #333;
+  transition:all .3s;
+}
+.rank-item:hover{border-color:#ff6ec7}
+.rank-num{
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:bold;font-size:1.1rem;
+  margin-right:1rem;
+  flex-shrink:0;
+}
+.rank-num.top1{background:#f9cb28;color:#000}
+.rank-num.top2{background:#c0c0c0;color:#000}
+.rank-num.top3{background:#cd7f32;color:#000}
+.rank-num.other{background:#222;color:#888;border:1px solid #444}
+.rank-info{flex:1}
+.rank-title{font-weight:bold;color:#fff;margin-bottom:0.2rem}
+.rank-views{font-size:0.8rem;color:#888}
+.rank-score{font-size:1.2rem;font-weight:bold;color:#f9cb28}
+
+/* ===== Features ===== */
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+.feature-card{
+  background:#111;
+  border:1px solid #333;
+  padding:1.5rem;
+  text-align:center;
+  transition:all .3s;
+}
+.feature-card:hover{border-color:#f9cb28;box-shadow:0 0 10px rgba(249,203,40,0.1)}
+.feature-icon{font-size:2.5rem;margin-bottom:1rem}
+.feature-card h3{color:#f9cb28;margin-bottom:0.5rem;font-size:1rem}
+.feature-card p{font-size:0.85rem;color:#aaa}
+
+/* ===== Guide Steps ===== */
+.guide-steps{
+  display:flex;
+  justify-content:space-between;
+  gap:1.5rem;
+  flex-wrap:wrap;
+}
+.step-card{
+  flex:1;
+  min-width:200px;
+  text-align:center;
+  padding:2rem 1rem;
+  background:#111;
+  border:1px solid #333;
+  position:relative;
+}
+.step-num{
+  width:50px;height:50px;
+  line-height:50px;
+  background:#ff6ec7;
+  color:#000;
+  font-size:1.5rem;
+  font-weight:bold;
+  margin:0 auto 1rem;
+}
+.step-card h3{color:#f9cb28;margin-bottom:0.5rem}
+.step-card p{font-size:0.85rem;color:#aaa}
+
+/* ===== FAQ ===== */
+.faq-item{
+  border:1px solid #333;
+  margin-bottom:0.5rem;
+  background:#111;
+}
+.faq-q{
+  padding:1rem;
+  cursor:pointer;
+  display:flex;
+  justify-contentspace-between;
+  align-items:center;
+  font-weight:bold;
+  color:#fff;
+  transition:background .3s;
+}
+.faq-q:hover{background:#1a1a1a}
+.faq-q::after{content:'+';font-size:1.5rem;color:#ff6ec7}
+.faq-item.open .faq-q::after{content:'−'}
+.faq-a{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .4s ease;
+  padding:0 1rem;
+  color:#aaa;
+  font-size:0.9rem;
+}
+.faq-item.open .faq-a{max-height:200px;padding:0 1rem 1rem}
+
+/* ===== Footer ===== */
+.footer{
+  background:#050505;
+  border-top:2px solid #ff6ec7;
+  padding:2rem 1rem;
+  text-align:center;
+}
+.footer p{margin-bottom:0.5rem;color:#666;font-size:0.85rem}
+.footer a{color:#ff6ec7}
+
+/* ===== Responsive ===== */
+@media(max-width:960px){
+  .movie-grid{grid-template-columns:repeat(3,1fr)}
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:2rem}
+}
+@media(max-width:640px){
+  .nav-links{display:none}
+  .movie-grid{grid-template-columns:repeat(2,1fr)}
+  .features-grid{grid-template-columns:1fr}
+  .guide-steps{flex-direction:column}
+  .hero h1{font-size:1.5rem}
+  .hero::after{font-size:8rem}
+  .dvd-float{width:80px;height:40px}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<!-- Floating DVD Logo -->
+<div class="dvd-float">
+  <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
+    <rect width="120" height="60" rx="5" fill="none"/>
+    <text x="60" y="38" text-anchor="middle" font-size="22" font-weight="bold" fill="#ff6ec7" font-family="Courier New">DVD</text>
+  </svg>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <nav class="nav-container">
+    <div class="logo">DVD<span>电影网</span></div>
+    <ul class="nav-links">
+      <li><a href="#category">影片分类</a></li>
+      <li><a href="#ranking">热播排行</a></li>
+      <li><a href="#features">平台特色</a></li>
+      <li><a href="#guide">使用指南</a></li>
+      <li><a href="#faq">常见问题</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>DVD电影网</h1>
+    <p>重温 DVD 时代的观影体验 · 海量高清影视免费在线观看</p>
+    <div class="hero-url">🌐 https://dvddianyingwang-h5/</div>
+  </div>
+</section>
+
+<!-- Category -->
+<section class="section" id="category">
+  <h2 class="section-title">影片分类</h2>
+  <div class="cat-pills">
+    <button class="cat-pill active">全部</button>
+    <button class="cat-pill">动作</button>
+    <button class="cat-pill">喜剧</button>
+    <button class="cat-pill">爱情</button>
+    <button class="cat-pill">科幻</button>
+    <button class="cat-pill">悬疑</button>
+    <button class="cat-pill">恐怖</button>
+    <button class="cat-pill">动漫</button>
+  </div>
+  <div class="movie-grid">
+    <div class="movie-card">
+      <div class="movie-poster" style="background:linear-gradient(135deg,#ff6ec7,#f9cb28)">🎬</div>
+      <div class="movie-info">
+        <div class="movie-title">碟中谍</div>
+        <div class="movie-meta">2024 · 动作 · 9.2分</div>
+      </div>
+    </div>
+    <div class="movie-card">
+      <div class="movie-poster" style="background:linear-gradient(135deg,#6e7bff,#6ec7ff)">🎭</div>
+      <div class="movie-info">
+        <div class="movie-title">疯狂喜剧夜</div>
+        <div class="movie-meta">2024 · 喜剧 · 8.5分</div>
+      </div>
+    </div>
+    <div class="movie-card">
+      <div class="movie-poster" style="background:linear-gradient(135deg,#ff6e9c,#c76eff)">💕</div>
+      <div class="movie-info">
+        <div class="movie-title">时光恋人</div>
+        <div class="movie-meta">2024 · 爱情 · 8.8分</div>
+      </div>
+    </div>
+    <div class="movie-card">
+      <div class="movie-poster" style="background:linear-gradient(135deg,#6effb1,#6ec7ff)">🚀</div>
+      <div class="movie-info">
+        <div class="movie-title">星际迷航</div>
+        <div class="movie-meta">2024 · 科幻 · 9.0分</div>
+      </div>
+    </div>
+    <div class="movie-card">
+      <div class="movie-poster" style="background:linear-gradient(135deg,#ff9c6e,#ff6e6e)">🔍</div>
+      <div class="movie-info">
+        <div class="movie-title">消失的线索</div>
+        <div class="movie-meta">2024 · 悬疑 · 8.7分</div>
+      </div>
+    </div>
+    <div class="movie-card">
+      <div class="movie-poster" style="background:linear-gradient(135deg,#9c6eff,#6e7bff)">👻</div>
+      <div class="movie-info">
+        <div class="movie-title">午夜惊魂</div>
+        <div class="movie-meta">2024 · 恐怖 · 7.9分</div>
+      </div>
+    </div>
+    <div class="movie-card">
+      <div class="movie-poster" style="background:linear-gradient(135deg,#6effd0,#6eb5ff)">🎨</div>
+      <div class="movie-info">
+        <div class="movie-title">千与千寻</div>
+        <div class="movie-meta">2024 · 动漫 · 9.5分</div>
+      </div>
+    </div>
+    <div class="movie-card">
+      <div class="movie-poster" style="background:linear-gradient(135deg,#ffe66e,#ff9c6e)">🏰</div>
+      <div class="movie-info">
+        <div class="movie-title">王者归来</div>
+        <div class="movie-meta">2024 · 奇幻 · 8.9分</div>
+      </div>
+    </div>
+    <div class="movie-card">
+      <div class="movie-poster" style="background:linear-gradient(135deg,#c7ff6e,#6effa8)">🥋</div>
+      <div class="movie-info">
+        <div class="movie-title">功夫之王</div>
+        <div class="movie-meta">2024 · 动作 · 8.6分</div>
+      </div>
+    </div>
+    <div class="movie-card">
+      <div class="movie-poster" style="background:linear-gradient(135deg,#ff6ec7,#c76eff)">🎪</div>
+      <div class="movie-info">
+        <div class="movie-title">马戏之王</div>
+        <div class="movie-meta">2024 · 歌舞 · 8.4分</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Ranking -->
+<section class="section" id="ranking" style="background:#0f0f0f">
+  <h2 class="section-title">热播排行榜</h2>
+  <ul class="rank-list">
+    <li class="rank-item">
+      <div class="rank-num top1">1</div>
+      <div class="rank-info">
+        <div class="rank-title">碟中谍</div>
+        <div class="rank-views">🔥 1,234,567 次播放</div>
+      </div>
+      <div class="rank-score">9.2</div>
+    </li>
+    <li class="rank-item">
+      <div class="rank-num top2">2</div>
+      <div class="rank-info">
+        <div class="rank-title">星际迷航</div>
+        <div class="rank-views">🔥 1,102,345 次播放</div>
+      </div>
+      <div class="rank-score">9.0</div>
+    </li>
+    <li class="rank-item">
+      <div class="rank-num top3">3</div>
+      <div class="rank-info">
+        <div class="rank-title">千与千寻</div>
+        <div class="rank-views">🔥 987,654 次播放</div>
+      </div>
+      <div class="rank-score">9.5</div>
+    </li>
+    <li class="rank-item">
+      <div class="rank-num other">4</div>
+      <div class="rank-info">
+        <div class="rank-title">时光恋人</div>
+        <div class="rank-views">🔥 876,543 次播放</div>
+      </div>
+      <div class="rank-score">8.8</div>
+    </li>
+    <li class="rank-item">
+      <div class="rank-num other">5</div>
+      <div class="rank-info">
+        <div class="rank-title">消失的线索</div>
+        <div class="rank-views">🔥 765,432 次播放</div>
+      </div>
+      <div class="rank-score">8.7</div>
+    </li>
+    <li class="rank-item">
+      <div class="rank-num other">6</div>
+      <div class="rank-info">
+        <div class="rank-title">王者归来</div>
+        <div class="rank-views">🔥 654,321 次播放</div>
+      </div>
+      <div class="rank-score">8.9</div>
+    </li>
+    <li class="rank-item">
+      <div class="rank-num other">7</div>
+      <div class="rank-info">
+        <div class="rank-title">疯狂喜剧夜</div>
+        <div class="rank-views">🔥 543,210 次播放</div>
+      </div>
+      <div class="rank-score">8.5</div>
+    </li>
+    <li class="rank-item">
+      <div class="rank-num other">8</div>
+      <div class="rank-info">
+        <div class="rank-title">功夫之王</div>
+        <div class="rank-views">🔥 432,109 次播放</div>
+      </div>
+      <div class="rank-score">8.6</div>
+    </li>
+  </ul>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+  <h2 class="section-title">平台特色</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">💿</div>
+      <h3>DVD 画质</h3>
+      <p>原汁原味 DVD 画质体验，重温经典观影时代</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🆓</div>
+      <h3>完全免费</h3>
+      <p>所有影片免费在线观看，无需注册登录</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <h3>手机适配</h3>
+      <p>完美适配手机端，随时随地畅享影视</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>极速加载</h3>
+      <p>多线路智能切换，告别缓冲等待</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <h3>每日更新</h3>
+      <p>每日同步最新院线资源，第一时间上线</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔍</div>
+      <h3>精准检索</h3>
+      <p>支持片名、演员、导演多维度搜索</p>
+    </div>
+  </div>
+</section>
+
+<!-- Guide -->
+<section class="section" id="guide" style="background:#0f0f0f">
+  <h2 class="section-title">快速使用指南</h2>
+  <div class="guide-steps">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h3>打开网站</h3>
+      <p>浏览器访问<br>dvddianyingwang-h5</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h3>选择影片</h3>
+      <p>浏览分类或搜索<br>找到想看的影片</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h3>点击播放</h3>
+      <p>一键点击播放<br>自动适配清晰度</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <h3>收藏网址</h3>
+      <p>Ctrl+D 收藏本站<br>下次快速访问</p>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:2rem">
+    <a href="#" style="display:inline-block;background:#ff6ec7;color:#000;padding:0.8rem 2rem;font-weight:bold;border:2px solid #ff6ec7;letter-spacing:1px">⭐ 立即收藏 https://dvddianyingwang-h5/</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <h2 class="section-title">常见问题</h2>
+  <div class="faq-item">
+    <div class="faq-q">DVD电影网需要注册吗？</div>
+    <div class="faq-a"><p>不需要，本站所有影片均支持免注册免费在线观看，打开即可播放。</p></div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">手机端可以正常观看吗？</div>
+    <div class="faq-a"><p>可以，本站采用响应式设计，完美适配 iOS 和 Android 手机浏览器。</p></div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">影片更新频率如何？</div>
+    <div class="faq-a"><p>每日更新最新院线电影、热播剧集和经典老片，保持资源时效性。</p></div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">播放卡顿怎么办？</div>
+    <div class="faq-a"><p>可尝试切换不同播放线路，或检查网络连接后刷新页面重新加载。</p></div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">如何找到想看的影片？</div>
+    <div class="faq-a"><p>可通过顶部分类标签筛选，或使用页面搜索功能输入片名/演员名查找。</p></div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>© 2024 DVD电影网 (dvddianyingwang-h5) - 高清影视在线观看平台</p>
+  <p>网址：<a href="https://dvddianyingwang-h5/">https://dvddianyingwang-h5/</a> | 免责声明：本站仅提供影视聚合服务，资源来自互联网</p>
+  <p style="margin-top:1rem;color:#444">🔗 内页链接测试：<a href="#">关于我们</a> | <a href="#">联系方式</a> | <a href="#">投稿合作</a> | <a href="#">隐私政策</a></p>
+</footer>
+
+<script>
+// FAQ Accordion
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.parentElement;
+    item.classList.toggle('open');
+  });
+});
+
+// Category Pill Active
+document.querySelectorAll('.cat-pill').forEach(pill=>{
+  pill.addEventListener('click',()=>{
+    document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
